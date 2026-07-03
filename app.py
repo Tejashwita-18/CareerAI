@@ -2,32 +2,35 @@ import streamlit as st
 from src.core.analyzer import analyze_resume
 from src.utils.file_handler import (save_uploaded_file_to_temp, delete_temp_file)
 
+from src.ui.header import render_header
+from src.ui.upload_section import render_upload_section
+from src.ui.results import render_results
+
+# -----------------------------------------
+# PAGE CONFIGURATION
+# -----------------------------------------
+
 st.set_page_config(
     page_title = "CareerAi",
     page_icon = "📄",
     layout = "wide"
 )
 
-st.title("📄 CareerAi")
-st.subheader("AI Powered Resume Analyzer")
+# -----------------------------------------
+# HEADER
+# -----------------------------------------
 
-st.write(
-    "Upload your resume and job description to compare your skills"
-)
+render_header()
 
-resume_file = st.file_uploader(
-    "Upload Resume (PDF)",
-    type = ["pdf"]
-)
+# -----------------------------------------
+# UPLOAD SECTION
+# -----------------------------------------
 
-jd_file = st.file_uploader(
-    "Upload Job Description",
-    type = ["txt"]
-)
+resume_file, jd_file, analyze_button = render_upload_section()
 
-analyze_button = st.button(
-    "Analyze Resume"
-)
+# -----------------------------------------
+# ANALYSIS
+# -----------------------------------------
 
 if analyze_button:
     if resume_file is None or jd_file is None:
@@ -41,34 +44,7 @@ if analyze_button:
             with st.spinner("Analyzing Resume..."):
                 result = analyze_resume(temp_resume, temp_jd)
             
-            st.success("Analysis Complete!")
-
-            st.divider()
-
-            st.subheader("📊 Match Score")
-
-            st.metric(
-                label = "Overall Match",
-                value = f"{result['score']}%"
-            )
-
-            st.subheader("✅ Matched Skills")
-
-            if result["matched"]:
-                for skill in sorted(result["matched"]):
-                    st.success(skill)
-
-            else:
-                st.info("No matching skills found!")
-
-            st.subheader("❌ Missing Skills")
-
-            if result["missing"]:
-                for skill in sorted(result["missing"]):
-                    st.error(skill)
-
-            else:
-                st.success("No missing skills!")
+            render_results(result)
 
         finally:
             delete_temp_file(temp_resume)
