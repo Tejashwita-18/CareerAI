@@ -1,7 +1,7 @@
 from src.parsers.resume_parser import extract_resume_text
 from src.parsers.jd_parser import extract_jd_text
 from src.extractors.skill_extractor import extract_skills
-from src.matchers.matcher import caculate_match
+from src.analysis.scorer import ResumeScorer
 
 def analyze_resume(resume_path: str, jd_path: str):
     """
@@ -15,7 +15,9 @@ def analyze_resume(resume_path: str, jd_path: str):
     resume_skills = extract_skills(resume_text)
     jd_skills = extract_skills(jd_text)
 
-    score, matched, missing = caculate_match(resume_skills, jd_skills)
+    scorer = ResumeScorer()
+
+    score, matched, missing = scorer.calculate_skill_score(resume_skills, jd_skills)
 
     return {
         "score": score,
