@@ -5,47 +5,106 @@ def render_results(result):
     Display analysis result.
     """
 
-    st.success("Analysis Complete!")
-
-    st.divider()
-
-    score_col, summary_col = st.columns(2)
-
-    with score_col:
-        st.subheader("📊 Match Score")
-
-        st.metric(
-            label = "Overall Match",
-            value = f"{result['score']}%"
-        )
-
-    with summary_col:
-        st.subheader("📋 Summary")
-
-        st.write(f"✅ Matched Skills: {len(result['matched'])}")
-
-        st.write(f"❌ Missing Skills: {len(result['missing'])}")
+    st.markdown("## 📊 Resume Analysis")
 
     st.write("")
 
-    matched_col, missing_col = st.columns(2)
+    metric1, metric2, metric3 = st.columns(3)
 
-    with matched_col:
-        st.subheader("✅ Matched Skills")
+    with metric1:
 
-        if result["matched"]:
+        st.metric(
+            "🎯 Match Score",
+            f"{result['score']}%"
+        )
+
+        st.progress(result["score"]/100)
+
+        if result['score'] >= 80:
+            st.success("Excellent Match")
+        elif result['score'] >= 60:
+            st.info("Good Match")
+        elif result['score'] >= 40:
+            st.warning("Average Match")
+        else:
+            st.error("Low Match")
+
+    with metric2:
+
+        st.metric(
+            "✅ Matched Skills",
+            len(result['matched'])
+        )
+
+        st.caption("Skills found in both your resume and job description.")
+
+    with metric3:
+
+        st.metric(
+            "❌ Missing Skills",
+            len(result['missing'])
+        )
+
+        st.caption("Skills required by the job but missing from your resume.")
+
+    st.write("")
+    st.write("")
+
+    left, right = st.columns(2, gap="large")
+
+    with left:
+
+        with st.expander(
+            f"✅ Matched Skills ({len(result['matched'])})",
+            expanded = True
+        ):
+
             for skill in sorted(result["matched"]):
-                st.success(skill)
+                st.markdown(f"""
+                    - ✅ **{skill.title()}**
+                """)
 
-        else:
-            st.info("No matching skills found!")
+    with right:
 
-    with missing_col:
-        st.subheader("❌ Missing Skills")
+        with st.expander(
+            f"❌ Missing Skills ({len(result['missing'])})",
+            expanded = True
+        ):
 
-        if result["missing"]:
             for skill in sorted(result["missing"]):
-                st.error(skill)
+                st.markdown(f"""
+                    - ❌ **{skill.title()}**
+                """)
 
-        else:
-            st.success("No missing skills!")
+    # AI Insight
+
+    st.write("")
+    st.divider()
+
+    st.subheader("🤖 AI Career Insight")
+
+    st.info(
+    """
+    🚧 Coming Soon
+
+    Gemini AI will provide:
+
+    • Resume improvement suggestions
+
+    • ATS optimization
+
+    • Skill gap analysis
+
+    • Learning roadmap
+
+    • Interview preparation
+    """
+    )
+
+    # FOOTER
+
+    st.divider()
+
+    st.caption(
+        "Built with ❤️ using Python • Streamlit • Pdfplumber"
+    )

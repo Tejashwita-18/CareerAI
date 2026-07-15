@@ -8,23 +8,34 @@ def render_upload_section():
         tuple: resume_file, jd_file, analyze_button
     """
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="large")
 
     with col1:
+
+        st.markdown("### 📄 Resume")
+
         resume_file = st.file_uploader(
-            "📄 Upload Resume",
-            type = ["pdf"]
+            "Upload your Resume",
+            type = ["pdf"],
+            label_visibility = "collapsed"
         )
 
     with col2:
+
+        st.markdown("### 💼 Job Description")
+
         jd_file = st.file_uploader(
-            "💼 Upload Job Description",
-            type = ["txt"]
+            "Upload your Job Description",
+            type = ["txt"],
+            label_visibility = "collapsed"
         )
 
-    left, center, right = st.columns([3,1,3])
+    st.write("")
 
-    with center:
+    col1,col2,col3 = st.columns([2.5,1,2.5])
+
+    with col2:
+
         analyze_button = st.button(
             "🚀 Analyze Resume",
             use_container_width = True

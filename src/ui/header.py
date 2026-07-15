@@ -5,9 +5,27 @@ def render_header():
     Render the application header
     """
 
-    st.title("📄 CareerAi")
+    st.markdown(
+        """
+<div class="hero">
 
-    st.subheader("AI Powered Resume Analyzer")
+<h1 align="center">
+🎯 CareerAi
+</h1>
 
-    st.write("Upload your resume and job description to compare your skills")
+<h2 align="center">
+Your Intelligent Career Assistant
+</h2>
 
+<p align="center">
+Compare your resume with any job description
+and instantly discover your strengths,
+missing skills and career opportunities.
+</p>
+
+</div>
+""",
+        unsafe_allow_html = True
+    )
+
+    st.markdown("<br>", unsafe_allow_html = True)

@@ -6,15 +6,19 @@ from src.ui.header import render_header
 from src.ui.upload_section import render_upload_section
 from src.ui.results import render_results
 
+from src.ui.theme import load_theme
+
 # -----------------------------------------
 # PAGE CONFIGURATION
 # -----------------------------------------
 
 st.set_page_config(
     page_title = "CareerAi",
-    page_icon = "📄",
+    page_icon = "🎯",
     layout = "wide"
 )
+
+load_theme()
 
 # -----------------------------------------
 # HEADER
