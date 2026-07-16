@@ -20,13 +20,25 @@ class ResumeScorer:
                 - Missing skills
         """
 
-        matched_skills = sorted(resume_skills.intersection(jd_skills))
-        missing_skills = sorted(jd_skills.difference(resume_skills))
+        # Convert categorized skills into flat sets
+        resume_set = {
+            skill
+            for skills in resume_skills.values()
+            for skill in skills
+        }
+        jd_set = {
+            skill
+            for skills in jd_skills.values()
+            for skill in skills
+        }
 
-        if not jd_skills:
+        matched_skills = sorted(resume_set.intersection(jd_set))
+        missing_skills = sorted(jd_set.difference(resume_set))
+
+        if not jd_set:
             score = 0.0
         else:
-            score = (len(matched_skills) / len(jd_skills)) * 100
+            score = (len(matched_skills) / len(jd_set)) * 100
         
         return score, matched_skills, missing_skills
     

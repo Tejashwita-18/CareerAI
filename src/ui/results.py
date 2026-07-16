@@ -9,7 +9,7 @@ def render_results(result):
 
     st.write("")
 
-    metric1, metric2, metric3 = st.columns(3)
+    metric1, metric2, metric3, metric4 = st.columns(4)
 
     with metric1:
 
@@ -46,6 +46,13 @@ def render_results(result):
         )
 
         st.caption("Skills required by the job but missing from your resume.")
+
+    with metric4:
+
+        st.metric(
+            "🤖 ATS Score",
+            f"{result['ats_score']}%"
+        )
 
     st.write("")
     st.write("")
@@ -100,6 +107,17 @@ def render_results(result):
     • Interview preparation
     """
     )
+
+    # ATS Score
+
+    st.subheader("📋 ATS Checklist")
+
+    if result['ats_issues']:
+        for issue in result['ats_issues']:
+            st.warning(issue)
+
+    else:
+        st.success("✅ No ATS issues detected.")
 
     # FOOTER
 
