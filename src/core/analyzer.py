@@ -30,6 +30,7 @@ def analyze_resume(resume_path: str, jd_path: str):
         "missing": missing,
         "ats_score": ats_result["ats_score"],
         "ats_issues": ats_result["issues"],
+        "ats_checks": ats_result["checks"],
         "resume_skills": resume_skills,
         "jd_skills": jd_skills
     }

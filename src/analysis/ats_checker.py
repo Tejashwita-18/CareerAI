@@ -1,3 +1,5 @@
+import re
+
 class ATSChecker:
     """
     Performs basic ATS compatibility checks.
@@ -10,32 +12,79 @@ class ATSChecker:
 
         score = 100
         issues = []
+        checks = {}
 
-        # Check resume length
+        text = resume_text.lower()
+
+        # ----------------------------------
+        #          Resume Length
+        # ----------------------------------
+
         word_count = len(resume_text.split())
 
         if word_count < 200:
             score -= 15
             issues.append("Resume is too short.")
+            checks["Resume Length"] = False
         elif word_count > 1000:
             score -= 10
             issues.append("Resume is too long.")
+            checks["Resume Length"] = False
+        else:
+            checks["Resume Length"] = True
 
-        # Check for email
-        if '@' not in resume_text:
+        # ----------------------------------
+        #              Email
+        # ----------------------------------
+
+        email_pattern = r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+
+        if re.search(email_pattern, resume_text):
+            checks["Email"] = True
+        else:
             score -= 20
-            issues.append("Email address was not found.")
+            issues.append("Email address not found.")
+            checks["Email"] = False
 
-        # Check for phone number
-        has_phone = any(char.isdigit() for char in resume_text)
+        # ----------------------------------
+        #          Phone Number
+        # ----------------------------------
 
-        if not has_phone:
+        phone_pattern = r"(\+?\d[\d\s\-]{8,}\d)"
+
+        if re.search(phone_pattern, resume_text):
+            checks["Phone Number"] = True
+        else:
             score -= 20
-            issues.append("Phone number was not found.")
+            issues.append("Phone number not found.")
+            checks["Phone Number"] = False
+
+        # ----------------------------------
+        #            LinkedIn
+        # ----------------------------------
+
+        if "linkedin.com" in text:
+            checks["LinkedIn"] = True
+        else:
+            score -= 5
+            issues.append("LinkedIn profile not found.")
+            checks["LinkedIn"] = False
+
+        # ----------------------------------
+        #             Github
+        # ----------------------------------
+
+        if "github.com" in text:
+            checks["Github"] = True
+        else:
+            score -= 5
+            issues.append("Github profile not found.")
+            checks["Github"] = False
 
         score = max(score, 0)
 
         return {
             "ats_score": score,
-            "issues" : issues
+            "issues" : issues,
+            "checks" : checks
         }

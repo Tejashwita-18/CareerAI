@@ -83,6 +83,27 @@ def render_results(result):
                     - ❌ **{skill.title()}**
                 """)
 
+    # ATS Score
+
+    st.subheader("📋 ATS Checklist")
+
+    checks = result["ats_checks"]
+
+    for item, passed in checks.items():
+        if passed:
+            st.success(f"✅ {item}")
+        else:
+            st.error(f"❌ {item}")
+
+    st.subheader("⚠️ ATS Recommendations")
+
+    if result['ats_issues']:
+        for issue in result['ats_issues']:
+            st.warning(issue)
+
+    else:
+        st.success("🎉 No ATS issues detected.")
+
     # AI Insight
 
     st.write("")
@@ -107,17 +128,6 @@ def render_results(result):
     • Interview preparation
     """
     )
-
-    # ATS Score
-
-    st.subheader("📋 ATS Checklist")
-
-    if result['ats_issues']:
-        for issue in result['ats_issues']:
-            st.warning(issue)
-
-    else:
-        st.success("✅ No ATS issues detected.")
 
     # FOOTER
 
