@@ -111,23 +111,7 @@ def render_results(result):
 
     st.subheader("🤖 AI Career Insight")
 
-    st.info(
-    """
-    🚧 Coming Soon
-
-    Gemini AI will provide:
-
-    • Resume improvement suggestions
-
-    • ATS optimization
-
-    • Skill gap analysis
-
-    • Learning roadmap
-
-    • Interview preparation
-    """
-    )
+    st.markdown(result["ai_feedback"])
 
     # FOOTER
 

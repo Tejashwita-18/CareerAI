@@ -3,6 +3,7 @@ from src.parsers.jd_parser import extract_jd_text
 from src.extractors.skill_extractor import extract_skills
 from src.analysis.scorer import ResumeScorer
 from src.analysis.ats_checker import ATSChecker
+from src.ai.feedback_generator import generate_ai_feedback
 
 def analyze_resume(resume_path: str, jd_path: str):
     """
@@ -24,6 +25,16 @@ def analyze_resume(resume_path: str, jd_path: str):
 
     ats_result = ats_checker.check_resume(resume_text)
 
+    ai_feedback = generate_ai_feedback(
+        resume_text = resume_text,
+        jd_text = jd_text,
+        score = score,
+        matched = matched,
+        missing = missing,
+        ats_score = ats_result["ats_score"],
+        ats_issues = ats_result["issues"]
+    )
+
     return {
         "score": score,
         "matched": matched,
@@ -32,5 +43,6 @@ def analyze_resume(resume_path: str, jd_path: str):
         "ats_issues": ats_result["issues"],
         "ats_checks": ats_result["checks"],
         "resume_skills": resume_skills,
-        "jd_skills": jd_skills
+        "jd_skills": jd_skills,
+        "ai_feedback": ai_feedback
     }
